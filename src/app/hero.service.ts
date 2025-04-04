@@ -1,10 +1,10 @@
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,32 @@ export class HeroService {
       )
   }
 
+  getHeroForm(id: number): Observable<FormGroup> {
+    const url = `${this.heroesUrl}/${id}`;
+    return this.http.get<Hero>(url)
+      .pipe(
+        map((hero)=>this.constructHeroForm(hero)),
+        tap(_ => this.log(`constructed HeroForm`)),
+        catchError(this.handleError<FormGroup>('FORM'))) ;
+  }
+
+  constructHeroForm(hero: Hero): FormGroup {
+    const heroForm = new FormGroup({
+      "id": new FormControl(hero.id),
+      "name": new FormControl(hero.name, Validators.required),
+      "race": new FormControl(hero.race, Validators.required),
+      "mana": new FormControl(
+        hero.mana, [Validators.pattern("\\d+")]),
+      "stamina": new FormControl(
+        hero.stamina, [Validators.pattern("\\d+")]),
+      "speed": new FormControl(
+        hero.speed, [Validators.pattern("\\d+")]),
+      "level": new FormControl(
+        hero.level, [Validators.pattern("\\d+")]),
+    });
+    return heroForm;
+  }
+
   private log(message: string) {
     this.messageService.add(`HeroService: ${message}`);
   }
@@ -43,7 +69,7 @@ export class HeroService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-      this.log(`${operation} faild: ${error.message}`);
+      this.log(`${operation} failed: ${error.message}`);
 
       return of(result as T);
     };
@@ -52,8 +78,16 @@ export class HeroService {
   updateHero(hero: Hero): Observable<any> {
     return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
       tap(_ => this.log(`updated hero id=${hero.id}`)),
-        catchError(this.handleError<any>('updaetHero'))
+        catchError(this.handleError<any>('updateHero'))
     );
+  }
+
+  updateHeroByForm(heroForm: FormGroup): Observable<any> {
+    return this.updateHero(this.form2Hero(heroForm));
+  }
+
+  form2Hero(heroForm: FormGroup): Hero {
+    return heroForm.value as Hero;
   }
 
   addHero(hero: Hero): Observable<Hero> {

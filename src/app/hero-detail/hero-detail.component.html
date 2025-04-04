@@ -1,10 +1,37 @@
-<div *ngIf="hero">
-  <h2>{{hero.name | uppercase}} Details</h2>
-  <div><span>id: </span>{{hero.id}}</div>
-  <div>
-    <label for="hero-name">Hero name: </label>
-    <input id="hero-name" [(ngModel)]="hero.name" placeholder="Hero name">
-  </div>
-  <button type="button" (click)="goBack()">go back</button>
-  <button type="button" (click)="save()">save</button>
+<div *ngIf="heroForm" >
+  <h2>{{heroForm.controls["name"].value | uppercase}} Details</h2>
+  <form [formGroup]="heroForm">
+    <div>
+      <label>Hero name: </label>
+      <input name="name" formControlName="name"/>
+    </div>
+
+    <div>
+      <label>Race: </label>
+      <input name="race" formControlName="race" />
+    </div>
+
+    <div>
+      <label>Mana: </label>
+      <input name="mana" formControlName="mana" />
+    </div>
+
+    <div>
+      <label>Stamina: </label>
+      <input name="stamina" formControlName="stamina" />
+    </div>
+
+    <div>
+      <label>Speed: </label>
+      <input name="speed" formControlName="speed" />
+    </div>
+
+    <div>
+      <label>Level: </label>
+      <input name="level" formControlName="level" />
+    </div>
+
+    <button type="button" (click)="goBack()">go back</button>
+    <button [disabled]="heroForm.invalid" type="submit" (click)="submit()">submit</button>
+  </form>
 </div>
