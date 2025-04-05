@@ -1,23 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  heroes: Hero[] = [];
+  heroes$: Observable<Hero[]>;
 
-  constructor(private heroService: HeroService) {}
-
-  ngOnInit(): void {
-    this.getHeroes();
+  constructor(private heroService: HeroService) {
+    this.heroes$ = this.getHeroes();
   }
 
-  getHeroes(): void {
-    this.heroService.getHeroes()
-      .subscribe(heroes => this.heroes = heroes.slice(1, 5));
+  ngOnInit(): void {
+  }
+
+  getHeroes(): Observable<Hero[]> {
+    return this.heroService.getHeroes();
   }
 }

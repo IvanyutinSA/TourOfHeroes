@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, Subject } from 'rxjs'
 
 import {
@@ -9,6 +9,7 @@ import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-hero-search',
   templateUrl: './hero-search.component.html',
   styleUrl: './hero-search.component.css'

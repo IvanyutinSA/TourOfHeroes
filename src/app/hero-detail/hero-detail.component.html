@@ -1,4 +1,4 @@
-<div *ngIf="heroForm" >
+<div *ngIf="heroForm$ | async as heroForm" >
   <h2>{{heroForm.controls["name"].value | uppercase}} Details</h2>
   <form [formGroup]="heroForm">
     <div>
