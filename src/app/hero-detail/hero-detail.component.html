@@ -32,6 +32,6 @@
     </div>
 
     <button type="button" (click)="goBack()">go back</button>
-    <button [disabled]="heroForm.invalid" type="submit" (click)="submit()">submit</button>
+    <button [disabled]="heroForm.invalid || (submitAction$ | async)" type="submit" (click)="submitAction$ = submit(heroForm)">submit</button>
   </form>
 </div>

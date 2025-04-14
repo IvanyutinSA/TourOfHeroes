@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
-import { Observable } from 'rxjs';
+import { Observable, EMPTY, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,16 +10,15 @@ import { Observable } from 'rxjs';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  heroes$: Observable<Hero[]>;
+  heroes$: Observable<Hero[]> = EMPTY;
 
-  constructor(private heroService: HeroService) {
-    this.heroes$ = this.getHeroes();
-  }
+  constructor(private heroService: HeroService) {}
 
   ngOnInit(): void {
+    this.getHeroes();
   }
 
-  getHeroes(): Observable<Hero[]> {
-    return this.heroService.getHeroes();
+  getHeroes(): void {
+    this.heroes$ = this.heroService.getHeroes();
   }
 }
