@@ -1,0 +1,36 @@
+authentication:
+  if not authenticated:
+    login: button
+    authenticate: button
+  else:
+    login: text
+    exit: button
+
+window:
+  login: field
+  first_password: field
+  second_password: field
+  authorize: button
+
+authenticate: action[button]:
+  if login is exist:
+    login_exist_message: string
+  else:
+    register: action[void]
+
+global:
+  login in storage
+  if was authenticated before:
+    keep authentication
+
+local_storage:
+  login: string
+  hashed_password: string
+
+hash:
+  sha256: function[string]
+
+components:
+  AuthenticationComponent
+  AuthenticationServiceComponent
+  WindowComponent
