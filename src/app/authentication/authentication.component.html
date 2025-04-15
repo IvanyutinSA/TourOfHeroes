@@ -1,4 +1,82 @@
-<div *ngIf='login$ | async as login'>
-  <span>{{login}}</span>
+<div *ngIf='login$ | async as loginx; else notLogged'>
+  <button type="button">
+    {{loginx}}
+  </button>
+  <button type="button"
+    (click)="logoutAction$ = logout()">
+    Logout
+  </button>
 </div>
+<ng-template #notLogged>
+  <div>
+    <button type="button"
+      (click)="open(loginTemp)">
+      Log In
+    </button>
+    <button type="button"
+      (click)="open(registerTemp)">
+      Register
+    </button>
+  </div>
+</ng-template>
 
+<ng-template #loginTemp let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Authentication</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+  <div *ngIf="loginForm$ | async as loginForm">
+    <div class="modal-body">
+        <form [formGroup]="loginForm">
+          <div>
+            <label>Login: </label>
+            <input name="login" formControlName="login"/>
+          </div>
+
+          <div>
+            <label>Password: </label>
+            <input name="password" formControlName="password"/>
+          </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+      <span *ngIf="error === 1">Error: try harder</span>
+      <button type="button" class="btn btn-outline-secondary" (click)="loginAction$ = login(loginForm)">log in</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #registerTemp let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Registration</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+  <div *ngIf="registerForm$ | async as registerForm">
+	<div class="modal-body">
+      <form [formGroup]="registerForm">
+        <div>
+          <label>Login: </label>
+          <input name="login" formControlName="login"/>
+        </div>
+
+        <div>
+          <label>Password: </label>
+          <input name="password" formControlName="password" type=hidden/>
+        </div>
+
+        <div>
+          <label>Confirm Password: </label>
+          <input name="confirmedPassword" formControlName="confirmedPassword"/>
+        </div>
+      </form>
+	</div>
+	<div class="modal-footer">
+    <span *ngIf="error == 1">Error: try harder</span>
+		<button type="button" class="btn btn-outline-secondary" (click)="registerAction$ = register(registerForm)">register</button>
+	</div>
+  </div>
+</ng-template>
+
+<div *ngIf="registerAction$ | async as x"></div>
+<div *ngIf="logoutAction$ | async as y"></div>
+<div *ngIf="loginAction$ | async as z"></div>

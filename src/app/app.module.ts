@@ -14,6 +14,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeroSearchComponent } from './hero-search/hero-search.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { WindowComponent } from './window/window.component';
 
 @NgModule({
   declarations: [
@@ -21,9 +23,10 @@ import { AuthenticationComponent } from './authentication/authentication.compone
     MessagesComponent,
     DashboardComponent,
     HeroSearchComponent,
-    AuthenticationComponent,
   ],
   imports: [
+    WindowComponent,
+    AuthenticationComponent,
     AppRoutingModule,
     BrowserModule,
     FormsModule,
@@ -33,7 +36,8 @@ import { AuthenticationComponent } from './authentication/authentication.compone
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataService, { dataEncapsulation: false }
-    )
+    ),
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
